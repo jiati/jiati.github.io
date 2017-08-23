@@ -1,0 +1,538 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="traning/js/echarts3.js" type="text/javascript" charset="utf-8"></script>
+    <script src="traning/js/json.js" type="text/javascript" charset="utf-8"></script>
+    <script src="traning/js/china.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <script src="company_echarts/echarts-master/dist/echarts.js" charset="utf-8"></script> -->
+    <style type="text/css">
+        h1 {
+            border-top: 10em
+        }
+        
+        .text1 {
+            margin: 10px;
+            margin-left: 150px;
+            margin-right: 150px;
+            left: 50px;
+            right: 50px;
+            font-family: "微软雅黑"
+        }
+        
+        .img1 {
+            text-align: center;
+        }
+        
+        .detail-info {
+            position: absolute;
+            top: 400px;
+            left: 20px;
+            width: 280px;
+            height: 600px;
+            border: 0px solid #ddd;
+            border-style: transparent;
+            color: #000;
+            overflow-y: auto;
+            font-family: "微软雅黑";
+            font-size: 12px;
+            z-index: 100;
+            padding: 5px;
+            background: #fff;
+            opacity: 0.8;
+        }
+        
+        .chart2 {
+            width: 1200px;
+            height: 600px;
+            float: left;
+        }
+        
+        .chart2_1 {
+            float: left;
+        }
+        
+        .chart2_2 {
+            float: right;
+        }
+    </style>
+</head>
+
+<body style="padding: 15px;background: #fff;">
+    <div>
+        <h1>药企沉浮录</h1>
+        <hr>
+    </div>
+    <div class="img1"><img src="png/top.png"></img>
+    </div>
+    <div class="text1">
+        <p>今年6月份出炉的《2016年中国制药企业排名》显示，修正药业集团股份公司成为行业老大，然而8月份的一纸判决书却又将其推上风口浪尖。据法治周末报道，其董事长修涞贵涉嫌行贿行为，给予曾担任吉林省靖宇县县长的褚来福25万通化市制药股份有限公司股权。报道也提到，这起行贿事件不过是医药行业贿赂的冰山一角，而贿赂案件之所以在医药行业频繁发生，很大程度上由于医药行业产品的同质化严重，企业为了争夺市场，不可避免采取一些不正当行为。
+        </p>
+    </div>
+
+
+    <!-- 第一张地图 -->
+    <div>
+        <div class="detail-info" style="display: none;">
+            <div style="padding: 3px;text-align: left;font-size: 16px;font-weight: 600;font-family:微软雅黑">详细信息</div>
+            <hr color="black" style="height:2px;">
+            <div id="detailInfo"></div>
+        </div>
+        <div id="map" style="width: 100%;height: 600px;"></div>
+        <script type="text/javascript">
+            function formatData(data) {
+                var series = [{
+                    data: []
+                }, {
+                    data: []
+                }]
+                for (var i = 0; i < data.length; i++) {
+                    var n = data[i].national_capital == "yes" ? 0 : 1
+                    series[n].data.push({
+                        name: data[i].medicine_company,
+                        year: data[i].year,
+                        setTime: data[i].year_month_day,
+                        type: data[i].type,
+                        num: data[i].capital_num,
+                        market: data[i].timeToMarket,
+                        boss: data[i].boss,
+                        shareholders: data[i].shareholders,
+                        executives: data[i].executives,
+                        address: data[i].address,
+                        province: data[i].province,
+                        capital: data[i].capital,
+                        value: [
+                            data[i].lon,
+                            data[i].lat,
+                            data[i].capital
+                        ]
+                    })
+                }
+                return series;
+            }
+
+            var data = {}
+            for (var i = 0; i < json.length; i++) {
+                var year = json[i].year;
+                if (!data[year]) {
+                    data[year] = [];
+                }
+                data[year].push(json[i])
+            }
+
+            var options = []
+            var min = 1979;
+            var cData = []
+            for (var key in data) {
+                if (key - min < 0) {
+                    min = key
+                }
+                cData = cData.concat(data[key]);
+                options.push({
+                    series: formatData(cData)
+                })
+            }
+
+            var firstSeries = (function() {
+                var series = [{
+                    type: 'scatter', //type: 'effectScatter'
+                    coordinateSystem: 'geo',
+                    data: [],
+                    symbolSize: function(val, param) {
+                        return param.data.num * 10
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#009999'
+                        }
+                    }
+                }, {
+                    type: 'scatter', //type: 'effectScatter'
+                    coordinateSystem: 'geo',
+                    data: [],
+                    symbolSize: 20,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#CCFFFF'
+                        }
+                    }
+                }]
+                var arr = []
+                for (var i = 0; i < data[min].length; i++) {
+                    var nData = data[min][i];
+                    arr.push({
+                        name: nData.medicine_company,
+                        year: nData.year,
+                        setTime: nData.year_month_day,
+                        type: nData.type,
+                        num: nData.capital_num,
+                        market: nData.timeToMarket,
+                        boss: nData.boss,
+                        shareholders: nData.shareholders,
+                        executives: nData.executives,
+                        address: nData.address,
+                        province: nData.province,
+                        capital: nData.capital,
+                        value: [
+                            nData.lon,
+                            nData.lat,
+                            nData.capital
+                        ]
+                    })
+                }
+                var n = nData.national_capital == "yes" ? 0 : 1
+                series[n].data = arr;
+                return series;
+            })()
+
+            var chart = echarts.init(document.getElementById("map"));
+
+            var option = {
+                baseOption: {
+                    timeline: {
+                        // y: 0,
+                        axisType: 'category',
+                        // realtime: false,
+                        loop: false,
+                        autoPlay: false,
+                        // currentIndex: 2,
+                        playInterval: 1000,
+                        // controlStyle: {
+                        //     position: 'left'
+                        // },
+                        data: ["1979", "1984", "1985", "1986", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2007", "2009", "2011", "2012"],
+                        label: {
+                            normal: {
+                                color: "#ffffff"
+                            },
+                            emphasis: {
+                                color: "#000000"
+                            }
+                            //			                formatter : function(s) {
+                            //			                    return (new Date(s)).getFullYear();
+                            //			                }
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(param) {
+                            if (param.componentType == "series") {
+                                var data = param.data;
+                                var text = "";
+                                text += "公司 : " + data.name + "<br/><br/>"
+                                text += "企业类型 : " + data.type + "<br/><br/>"
+                                text += "法人 : " + data.boss + "<br/>"
+                                var shareholders = data.shareholders
+                                    //				        	if ( shareholders.length > 50 ){
+                                    //				        		var arr = shareholders.split(",");
+                                    //				        	}
+                                    //					        	text += "重要股东 : " + data.shareholders + "<br/>"
+                                return text;
+                            }
+                        }
+                    },
+                    geo: {
+                        map: 'china',
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#000',
+                                borderColor: '#fff'
+                            },
+                            emphasis: {
+                                areaColor: '#000'
+                            }
+                        }
+                    },
+                    series: firstSeries
+                        //				    [
+                        //				   	 	{
+                        //					     	type: 'scatter',
+                        //					        coordinateSystem: 'geo',
+                        //					        data: firstData,
+                        //					        symbolSize: 20,
+                        ////					        function(val) {
+                        ////					        	if ( typeof(val[2]) == "string" ){
+                        ////					        		val[2] = parseInt(val[2]) * 10000;
+                        ////					        	}
+                        ////					        	val[2] > 50000 ? val[2] = 50000 : val[2];
+                        ////					        	val[2] < 10000 ? val[2] = 10000 : val[2];
+                        ////					            return Math.max(val[2] / 1000, 8);
+                        ////					        },
+                        //					        label: {
+                        //					            normal: {
+                        //					                show: false
+                        //					            },
+                        //					            emphasis: {
+                        //					                show: false
+                        //					            }
+                        //					        },
+                        //					        itemStyle: {
+                        //					            normal: {
+                        //					                color: '#FF8C00'
+                        //					            }
+                        //					        }
+                        //						}
+                        //				   	]
+                },
+                options: options
+            };
+            chart.setOption(option);
+
+            chart.on("click", function(param) {
+                if (param.componentType == "series") {
+                    var data = param.data;
+                    var div = document.getElementById("detailInfo");
+                    document.getElementsByClassName("detail-info")[0].style.display = "block";
+                    div.innerHTML = "";
+                    for (var key in data) {
+                        if (info[key] && data[key].length > 0) {
+                            var spanNode = document.createElement("span");
+                            var textnode = document.createTextNode(info[key] + " : " + data[key]);
+                            spanNode.appendChild(textnode);
+                            div.appendChild(spanNode);
+                            var brNode = document.createElement("br");
+                            div.appendChild(brNode);
+                            var brNode = document.createElement("br");
+                            div.appendChild(brNode);
+                        }
+                    }
+                }
+            })
+        </script>
+    </div>
+
+
+
+
+    <div class="text1">
+        <p>通过了解这100家制药企业的情况，兴许可以一窥医药企业的残酷竞争。</p>
+        <p>
+            2005年，中国制药百强企业入围门槛仅为4.8亿元，而今年中国制药百强的入门门槛(金赛药业)则攀升至13.79亿元，百强企业扩张势头十分迅猛。其中，拥有国资背景的企业仅30家，排名前10的企业中，仅云南白药集团股份有限公司和哈药集团股份有限公司具有国资背景，分别排名第5和第10，民营企业发展迅猛。同时，根据地域分布，百强企业多分布于东部地区，共计55家，以山东（12家）和江苏（8家）最多，相比2015年（64家）有所减少，尽管并非所有的中国制药类企业参与评选，而评选的标准也仅为相对情况，但仅仅一年时间，企业沉浮可见一斑。
+        </p>
+    </div>
+
+    <br></br>
+    <div class="chart2" style="width:1200px;height:600px">
+        <div class="chart2_1" style="width:500px;height:600px">
+            <div id="main" style="width:500px;height:500px"></div>
+            <script>
+                var myChart = echarts.init(document.getElementById('main'));
+                option = {
+                    title: {
+                        text: '企业类型',
+                        x: 'center',
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        top: 30,
+                        data: ['上市A股', '有限责任公司', '中外合资', '外资', '股份有限公司（非上市）', '上市港股', '新三板', '有港澳台资背景']
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: {
+                                show: true
+                            },
+                            dataView: {
+                                show: true,
+                                readOnly: false
+                            },
+                            magicType: {
+                                show: true,
+                                type: ['pie', 'funnel']
+                            },
+                            restore: {
+                                show: true
+                            },
+                            saveAsImage: {
+                                show: true
+                            }
+                        }
+                    },
+                    calculable: true,
+                    series: [{
+                        name: '面积模式',
+                        type: 'pie',
+                        radius: [40, 160],
+                        center: ['50%', '60%'],
+                        roseType: 'area',
+                        data: [{
+                            value: 40,
+                            name: '上市A股'
+                        }, {
+                            value: 29,
+                            name: '有限责任公司'
+                        }, {
+                            value: 10,
+                            name: '中外合资'
+                        }, {
+                            value: 4,
+                            name: '外资'
+                        }, {
+                            value: 4,
+                            name: '股份有限公司（非上市）'
+                        }, {
+                            value: 2,
+                            name: '上市港股'
+                        }, {
+                            value: 3,
+                            name: '新三板'
+                        }]
+                    }]
+                };
+
+
+                myChart.setOption(option);
+            </script>
+            <div style="height: 100px;margin-left: 50px;">这里应该有文字这里应该有文字这里应该有文字这里应该有文字这里应该有文字</div>
+        </div>
+
+        <div class="chart2_2" style="width:500px;height:500px;">
+            <div id="main1" style="width:500px;height:500px"></div>
+            <script>
+                var myChart1 = echarts.init(document.getElementById('main1'));
+                option = {
+                    title: {
+                        text: '企业注册资本',
+                        x: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'value',
+                        boundaryGap: [0, 0.01],
+                        splitLine: false
+                    },
+                    yAxis: {
+                        name: '万元',
+                        name: '万元',
+                        type: 'category',
+                        data: ['100000以下', '100000-200000', '200000-300000', '300000-400000', '400000-500000'],
+                        axisTick: false,
+                        splitLine: false
+
+                    },
+
+                    series: [{
+                        name: '公司数量',
+                        type: 'bar',
+                        data: [74, 16, 7, 2, 1],
+
+                        itemStyle: {
+                            normal: {
+                                color: function(params) {
+                                    var colorlist = ['#009999', '#339999', '#66CCCC', '#99CCCC', '#CCFFFF'];
+                                    return colorlist[params.dataIndex]
+                                }
+                            }
+                        }
+                    }]
+                };
+                myChart1.setOption(option);
+            </script>
+            <div style="height: 100px;margin-right: 50px;">这里也应该有文字这里也应该有文字这里也应该有文字这里也应该有文字这里也应该有文字</div>
+        </div>
+
+    </div>
+
+
+    <div class="text1">
+        <p>纵观整个行业背景，70年代青蒿素问世后，中国的制药公司再没有真正研制出过一款首创药，多数以生产仿制药为主，根据食药总局提供的统计数字，中国已有的药品批准文号总数高达18.9万个，95%以上为仿制药。但中国的制药行业依然蒸蒸日上，每年经济增长平均可达18%左右。2015年来仿制药受到政策限制，但根据国家统计局数据，2016年我国医药制造业的利润依然较上年同期增长 13.9%。
+        </p>
+    </div>
+
+    <!-- <div style="width:48%;display: inline-block;border: 1px solid black;height: 300px;">
+
+    </div>
+
+    <div style="width:48%;display: inline-block;height: 300px;vertical-align: middle;">
+        <p>中国似乎想要迎来新药上市潮，但这里的“新”却很难指向首创药。2015年以来，据不完全统计，新注册的制药公司高达7029家，这些企业绝大多数小而分散，分布在医药发达的地区，如江苏、广东、山东等地，缺乏主导产品和创新研究。
+        </p>
+    </div> -->
+
+    <div>
+        <div style="width:48%;display: inline-block;border: 1px solid black;height: 300px;">
+
+        </div>
+        <div style="width:48%;display: inline-block;height: 300px;vertical-align: middle;">
+            中国似乎想要迎来新药上市潮，但这里的“新”却很难指向首创药。2015年以来，据不完全统计，新注册的制药公司高达7029家，这些企业绝大多数小而分散，分布在医药发达的地区，如江苏、广东、山东等地，缺乏主导产品和创新研究。
+        </div>
+    </div>
+
+
+    <div class="text1">
+        <p>根据塔夫茨药物开发研究中心提供的一项数据显示，开发一个新药的平均成本大约为26亿美元，且时间成本巨大，有时长达数十年的研究也不一定有所成效，显然对中国的大部分企业来讲，这不是一个明智的选择。仿制药成为中国制药企业的首选，原因也正在于此，而一些成本低，易出成效的研究更是成为热门靶点，产品重复申报，导致同质化现象严重，企业基本处于无序竞争的状态。
+        </p>
+    </div>
+
+
+    <!-- <div>
+        <div style="width:48%;display: inline-block;border: 1px solid black;height: 300px;">
+
+        </div>
+        <div style="width:48%;display: inline-block;height: 300px;vertical-align: middle;">
+            根据塔夫茨药物开发研究中心提供的一项数据显示，开发一个新药的平均成本大约为26亿美元，且时间成本巨大，有时长达数十年的研究也不一定有所成效，显然对中国的大部分企业来讲，这不是一个明智的选择。仿制药成为中国制药企业的首选，原因也正在于此，而一些成本低，易出成效的研究更是成为热门靶点，产品重复申报，导致同质化现象严重，企业基本处于无序竞争的状态。
+        </div>
+    </div> -->
+
+    <!-- <div class="text1">
+        <p>纵观整个行业背景，70年代青蒿素问世后，中国的制药公司再没有真正研制出过一款首创药，多数以生产仿制药为主，根据食药总局提供的统计数字，中国已有的药品批准文号总数高达18.9万个，95%以上为仿制药。但中国的制药行业依然蒸蒸日上，每年经济增长平均可达18%左右。2015年来仿制药受到政策限制，但根据国家统计局数据，2016年我国医药制造业的利润依然较上年同期增长 13.9%。
+        </p>
+        <p>中国似乎想要迎来新药上市潮，但这里的“新”却很难指向首创药。2015年以来，据不完全统计，新注册的制药公司高达7029家，这些企业绝大多数小而分散，分布在医药发达的地区，如江苏、广东、山东等地，缺乏主导产品和创新研究。
+        </p>
+        <p>根据塔夫茨药物开发研究中心提供的一项数据显示，开发一个新药的平均成本大约为26亿美元，且时间成本巨大，有时长达数十年的研究也不一定有所成效，显然对中国的大部分企业来讲，这不是一个明智的选择。仿制药成为中国制药企业的首选，原因也正在于此，而一些成本低，易出成效的研究更是成为热门靶点，产品重复申报，导致同质化现象严重，企业基本处于无序竞争的状态。
+        </p>
+    </div> -->
+</body>
+
+</html>
