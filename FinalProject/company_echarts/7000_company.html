@@ -1,0 +1,248 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Echarts</title>
+    <script src="echarts-master/dist/echarts.min.js"></script>
+    <script src="7000_company/china.js"></script>
+    <!--要异步加载json的时候要记得引用：-->
+    <script type="text/javascript" src="7000_company/jquery-3.2.1.min.js"></script>
+    <style>
+        body {
+            background-color: #FFF;
+        }
+        
+        #mainsss {
+            height: 760px;
+            width: 90%;
+            margin: 40px;
+            background-color: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mainsss"></div>
+    <script>
+        var myChart1 = echarts.init(document.getElementById("mainsss"));
+
+        var options = {
+
+            baseOption: {
+                timeline: {
+                    data: ['2015',
+                        '2016',
+                        '2017',
+                    ],
+                    show: true,
+                    top: 20,
+                    left: 600,
+                    lineStyle: {
+                        show: false,
+                    },
+                    symbolSize: 0,
+                    autoPlay: true,
+                    playInterval: 2000,
+                    loop: true,
+                    label: {
+                        normal: {
+                            show: false,
+                        },
+                    },
+                    checkpointStyle: {
+                        color: "transparent",
+                        borderColor: "transparent",
+                    },
+                    controlStyle: {
+                        showPrevBtn: false,
+                        showNextBtn: false,
+                        itemSize: 50,
+                        normal: {
+                            color: '#009999',
+                            borderColor: '#009999',
+                            borderWidth: 1.5,
+                        },
+                        emphasis: {
+                            color: '#ffce22',
+                            borderColor: '#ffce22',
+                            borderWidth: 1.5,
+                        },
+
+                    }
+                },
+                title: {
+                    left: 400,
+                    top: 15,
+                    textStyle: {
+                        color: '#009999',
+                        fontWeight: "bold",
+                        fontSize: 60,
+                    },
+
+
+                },
+                //backgroundColor: '#373737',
+                grid: [{
+                    x: '30%',
+                    y: '40%',
+                    width: '18%',
+                    height: '48%',
+                    show: false,
+                }, {
+                    x: '65%',
+                    y: '40%',
+                    width: '28%',
+                    height: '48%',
+                    show: false,
+                }],
+
+                yAxis: [{
+                    type: 'category',
+                    axisLabel: {
+                        interval: 0,
+                        textStyle: {
+                            color: '#009999'
+                        }
+                    },
+                    axisLine: {
+                        show: false,
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                    data: ['安徽',
+                        '贵州',
+                        '云南',
+                        '新疆',
+                        '四川',
+                        '上海',
+                        '山西',
+                        '青海',
+                        '宁夏',
+                        '江西',
+                        '江苏',
+                        '吉林',
+                        '湖南',
+                        '湖北',
+                        '黑龙江',
+                        '河南',
+                    ],
+                    splitLine: {
+                        show: false
+                    },
+                    gridIndex: 0,
+                    inverse: true,
+
+                }, {
+                    type: 'category',
+                    axisLabel: {
+                        interval: 0,
+                        textStyle: {
+                            color: '#009999'
+                        }
+                    },
+                    axisLine: {
+                        show: false,
+                    },
+                    axisTick: {
+                        show: false,
+                    },
+                    data: [
+                        '浙江',
+                        '重庆',
+                        '北京',
+                        '内蒙古',
+                        '天津',
+                        '海南',
+                        '河北',
+                        '福建',
+                        '广东',
+                        '广西',
+                        '陕西',
+                        '西藏',
+                        '山东',
+                        '辽宁',
+                        '甘肃',
+                    ],
+                    splitLine: {
+                        show: false
+                    },
+                    gridIndex: 1,
+                    inverse: true,
+                }],
+
+                xAxis: [{
+                    type: 'value',
+                    min: -2,
+                    max: 500,
+                    show: false,
+                    gridIndex: 0,
+                }, {
+                    type: 'value',
+                    min: -2,
+                    max: 500,
+                    show: false,
+                    gridIndex: 1,
+                }],
+
+
+                series: [{
+                    name: '各省数量1',
+                    type: 'bar',
+                    xAxisIndex: 0,
+                    yAxisIndex: 0,
+                    itemStyle: {
+                        normal: {
+                            color: '#009999'
+                        }
+                    },
+                    data: null,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight',
+                            textStyle: {
+                                color: '#373737'
+                            }
+                        },
+                    },
+                }, {
+                    name: '各省数量2',
+                    type: 'bar',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    itemStyle: {
+                        normal: {
+                            color: '#009999'
+                        }
+                    },
+                    data: null,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight',
+                            textStyle: {
+                                color: '#373737',
+                            },
+                        },
+                    },
+                }],
+
+
+
+
+            },
+            options: null,
+
+
+        }
+        var all_data;
+        $.getJSON("all_years.json", function(res) {
+            all_data = res;
+            options.options = res;
+            myChart1.setOption(options)
+        })
+    </script>
+</body>
+
+</html>

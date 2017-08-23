@@ -1,0 +1,85 @@
+﻿<html>
+
+<head>
+    <script src="echarts-master/dist/echarts.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="main" style="width:1000px;height:1000px"></div>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            title: {
+                text: '企业类型',
+                // subtext: '纯属虚构',
+                x: 'center'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                x: 'center',
+                y: '55%',
+                data: ['上市A股', '有限责任公司', '中外合资', '外资', '股份有限公司（非上市）', '上市港股', '新三板', '有港澳台资背景']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    mark: {
+                        show: true
+                    },
+                    dataView: {
+                        show: true,
+                        readOnly: false
+                    },
+                    magicType: {
+                        show: true,
+                        type: ['pie', 'funnel']
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            calculable: true,
+            series: [{
+                name: '面积模式',
+                type: 'pie',
+                radius: [80, 200],
+                center: ['50%', '30%'],
+                roseType: 'area',
+                data: [{
+                    value: 40,
+                    name: '上市A股'
+                }, {
+                    value: 29,
+                    name: '有限责任公司'
+                }, {
+                    value: 10,
+                    name: '中外合资'
+                }, {
+                    value: 4,
+                    name: '外资'
+                }, {
+                    value: 4,
+                    name: '股份有限公司（非上市）'
+                }, {
+                    value: 2,
+                    name: '上市港股'
+                }, {
+                    value: 3,
+                    name: '新三板'
+                }]
+            }]
+        };
+
+
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,65 @@
+﻿<html>
+
+<head>
+    <script src="echarts-master/dist/echarts.js"></script>
+</head>
+
+<body>
+    <div id="main" style="width:500px;height:400px"></div>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        option = {
+            title: {
+                text: '企业注册资本',
+               
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'value',
+                boundaryGap: [0, 0.01],
+                splitLine:false
+            },
+            yAxis: {
+				name : '万元',
+				name : '万元',
+                type: 'category',
+                data: ['100000以下','100000-200000','200000-300000','300000-400000','400000-500000'],
+                axisTick:false,
+                splitLine:false
+				
+            },
+			
+            series: [
+            {
+                name: '公司数量',
+                type: 'bar',
+                data: [74, 16, 7, 2, 1],
+
+                itemStyle:{
+                    normal:{
+                        color:function(params){
+                            var colorlist = ['#009999','#339999','#66CCCC','#99CCCC','#CCFFFF'];
+                            return colorlist[params.dataIndex]
+                        }
+                    }
+                }
+            }
+            ]
+        };
+        myChart.setOption(option);
+    </script>
+</body>
+
+</html>
