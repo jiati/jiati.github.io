@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="js/echarts3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/json.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/china.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.detail-info {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 280px;
+				height: 600px;
+				border: 0px solid #ddd;
+				border-style:transparent;
+				color: #000;
+				overflow-y: auto;
+				font-size: 14px;
+				z-index: 100;
+				padding: 5px;
+				background: #fff;
+				opacity:0.8;
+			}
+		</style>
+	</head>
+	<body style="padding: 15px;background: #fff;">
+		<div class="detail-info" style="display: none;">
+			<br></b><br></br><br></br><div style="padding: 3px;text-align: left;font-size: 20px;font-weight: 600;">详细信息</div>
+			<hr color="black" style="height:2px;">
+			<div id="detailInfo"></div>
+		</div>
+		<div id="map" style="width: 100%;height: 600px;"></div>
+		<script type="text/javascript">
+			function formatData(data){
+				var series = [{data:[]},{data:[]}]
+				for ( var i = 0 ; i< data.length ; i ++ ){
+					var n = data[i].national_capital == "yes" ? 0 : 1
+					series[n].data.push({
+						name:data[i].medicine_company,
+						year:data[i].year,
+						setTime:data[i].year_month_day,
+						type:data[i].type,
+						num:data[i].capital_num,
+						market:data[i].timeToMarket,
+						boss:data[i].boss,
+						shareholders:data[i].shareholders,
+						executives:data[i].executives,
+						address:data[i].address,
+						province:data[i].province,
+						capital:data[i].capital,
+						value:[
+							data[i].lon,
+							data[i].lat,
+							data[i].capital
+						]
+					})
+				}
+				return series;
+			}
+			
+			var data = {}
+			for ( var i = 0 ; i < json.length ; i ++ ){
+				var year = json[i].year;
+				if ( !data[year] ){
+					data[year] = [];
+				}
+				data[year].push(json[i])
+			}
+			
+			var options = []
+			var min = 1979;
+			var cData = []
+			for ( var key in data ){
+				if ( key - min < 0 	){
+					min = key
+				}
+				cData = cData.concat(data[key]);
+				options.push({
+					series:formatData(cData)
+				})
+			}
+			
+			var firstSeries = (function(){
+				var series = [
+					{
+				     	type: 'scatter', //type: 'effectScatter'
+				        coordinateSystem: 'geo',
+				        data: [],
+				        symbolSize: function(val,param){
+				        	return param.data.num * 10
+				        },
+				        showEffectOn: 'render',
+				        rippleEffect: {
+				            brushType: 'stroke'
+				        },
+				        hoverAnimation: true,
+				        label: {normal: {show: false},emphasis:{show: false}},
+				        itemStyle: {normal: {color: '#009999'}}
+					},
+					{
+						type: 'scatter', //type: 'effectScatter'
+				        coordinateSystem: 'geo',
+				        data: [],
+				        symbolSize: 20,
+				        showEffectOn: 'render',
+				        rippleEffect: {
+				            brushType: 'stroke'
+				        },
+				        hoverAnimation: true,
+				        label: {normal: {show: false},emphasis:{show: false}},
+				        itemStyle: {normal: {color: '#CCFFFF'}}
+					}
+				]
+				var arr = []
+				for ( var i = 0 ; i < data[min].length ; i ++ ){
+					var nData = data[min][i];
+					arr.push({
+						name:nData.medicine_company,
+						year:nData.year,
+						setTime:nData.year_month_day,
+						type:nData.type,
+						num:nData.capital_num,
+						market:nData.timeToMarket,
+						boss:nData.boss,
+						shareholders:nData.shareholders,
+						executives:nData.executives,
+						address:nData.address,
+						province:nData.province,
+						capital:nData.capital,
+						value:[
+							nData.lon,
+							nData.lat,
+							nData.capital
+						]
+					})
+				}
+				var n = nData.national_capital == "yes" ? 0 : 1
+				series[n].data = arr;
+				return series;
+			})() 
+			
+			var chart = echarts.init(document.getElementById("map"));
+			
+			var option = {
+				baseOption : {
+					timeline: {
+			            // y: 0,
+			            axisType: 'category',
+			            // realtime: false,
+			            loop: false,
+			            autoPlay: false,
+			            // currentIndex: 2,
+			            playInterval: 1000,
+			            // controlStyle: {
+			            //     position: 'left'
+			            // },
+			            data: ["1979","1984","1985","1986","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2007","2009","2011","2012"],
+			            label: {
+			            	normal:{
+			            		color:"#ffffff"
+			            	},
+			            	emphasis:{
+			            		color:"#000000"
+			            	}
+//			                formatter : function(s) {
+//			                    return (new Date(s)).getFullYear();
+//			                }
+			            }
+			        },
+					tooltip: {
+				        trigger: 'item',
+				        formatter: function(param){
+				        	if( param.componentType == "series" ){
+				        		var data = param.data;
+					        	var text = "";
+					        	text += "公司 : " + data.name + "<br/><br/>"
+					        	text += "企业类型 : " + data.type + "<br/><br/>"
+					        	text += "法人 : " + data.boss + "<br/>"
+					        	var shareholders = data.shareholders
+	//				        	if ( shareholders.length > 50 ){
+	//				        		var arr = shareholders.split(",");
+	//				        	}
+//					        	text += "重要股东 : " + data.shareholders + "<br/>"
+					        	return text;
+				        	}
+				        }
+				    },
+				    geo: {
+				        map: 'china',
+				        label: {normal:{show:false},emphasis:{show: false}},
+				        roam: true,
+				        itemStyle: {
+				            normal: {
+				                areaColor: '#000',
+				                borderColor: '#fff'
+				            },
+				            emphasis: {
+				                areaColor: '#000'
+				            }
+				        }
+				    },
+				    series: firstSeries
+//				    [
+//				   	 	{
+//					     	type: 'scatter',
+//					        coordinateSystem: 'geo',
+//					        data: firstData,
+//					        symbolSize: 20,
+////					        function(val) {
+////					        	if ( typeof(val[2]) == "string" ){
+////					        		val[2] = parseInt(val[2]) * 10000;
+////					        	}
+////					        	val[2] > 50000 ? val[2] = 50000 : val[2];
+////					        	val[2] < 10000 ? val[2] = 10000 : val[2];
+////					            return Math.max(val[2] / 1000, 8);
+////					        },
+//					        label: {
+//					            normal: {
+//					                show: false
+//					            },
+//					            emphasis: {
+//					                show: false
+//					            }
+//					        },
+//					        itemStyle: {
+//					            normal: {
+//					                color: '#FF8C00'
+//					            }
+//					        }
+//						}
+//				   	]
+				},
+				options : options
+			};
+			chart.setOption(option);
+			
+			chart.on("click",function(param){
+				if ( param.componentType == "series" ){
+					var data = param.data;
+					var div = document.getElementById("detailInfo");
+					document.getElementsByClassName("detail-info")[0].style.display = "block";
+					div.innerHTML = "";
+					for ( var key in data ){
+						if ( info[key] && data[key].length > 0 ){
+							var spanNode = document.createElement("span");
+							var textnode = document.createTextNode(info[key] + " : "+ data[key]);
+							spanNode.appendChild(textnode);
+							div.appendChild(spanNode);
+							var brNode = document.createElement("br");
+							div.appendChild(brNode);
+							var brNode = document.createElement("br");
+							div.appendChild(brNode);
+						}
+					}
+				}
+			})
+			
+		</script>
+	</body>
+</html>
