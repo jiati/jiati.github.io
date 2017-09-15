@@ -1,0 +1,788 @@
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="high_map/echarts.js" type="text/javascript" charset="utf-8"></script>
+    <script src="high_map/json.js" type="text/javascript" charset="utf-8"></script>
+    <script src="high_map/china.js" type="text/javascript" charset="utf-8"></script>
+
+
+    <script type="text/javascript" src="high_map/jquery-3.2.1.min.js"></script>
+    <!-- <script src="company_echarts/echarts-master/dist/echarts.js" charset="utf-8"></script> -->
+    <style type="text/css">
+        h1 {
+            border-top: 100em;
+            font-family: "微软雅黑";
+            font-size: 40px;
+            margin: 10px;
+            margin-left: 150px;
+            margin-right: 150px;
+            left: 50px;
+            right: 50px;
+            font-family: "微软雅黑"
+        }
+        
+        h3 {
+            font-size: 16px;
+            font-family: "微软雅黑"
+        }
+        
+        hr {
+            /* margin: 10px;
+            margin-left: 150px;
+            margin-right: 150px;
+            left: 50px;
+            right: 50px;*/
+            height: 4px;
+            background-color: #666;
+        }
+        
+        .text1 {
+            margin: 10px;
+            margin-left: 150px;
+            margin-right: 150px;
+            left: 50px;
+            right: 50px;
+            font-family: "微软雅黑"
+        }
+        
+        .text2 {
+            font-size: 12px;
+            font-family: "微软雅黑";
+            margin: 10px;
+            margin-left: 150px;
+            margin-right: 150px;
+            left: 50px;
+            right: 50px;
+        }
+        
+        .img1 {
+            text-align: center;
+        }
+        
+        .detail-info {
+            position: absolute;
+            top: 400px;
+            left: 20px;
+            width: 280px;
+            height: 600px;
+            border: 0px solid #ddd;
+            border-style: transparent;
+            color: #000;
+            overflow-y: auto;
+            font-family: "微软雅黑";
+            font-size: 12px;
+            z-index: 100;
+            padding: 5px;
+            background: #fff;
+            opacity: 0.8;
+        }
+        
+        .chart2 {
+            width: 1200px;
+            /* height: 600px; */
+            float: center;
+        }
+        
+        .chart2_1 {
+            float: center;
+        }
+        
+        body {
+            background-color: #FFF;
+        }
+        
+        #mainsss {
+            height: 760px;
+            width: 90%;
+            margin: 40px;
+            background-color: #FFF;
+        }
+    </style>
+</head>
+
+<body style="padding: 15px;background: #fff;">
+    <div class="img1"><img src="image/2.jpg" width="75%"></img>
+    </div>
+    <p style="height: 20px"> </p>
+    <div>
+        <h1 style="text-align:center">药企十年沉浮录</h1>
+        <hr style="text-align:center" width="15%">
+        <p style="text-align:center; height: 35px; margin-top: 8px;font-family: 微软雅黑">文／图 梁银妍</p>
+    </div>
+
+    <div class="text1">
+        <p>2007年，对制药企业来讲，不啻是一场腥风血雨。
+        </p>
+        <p>这一年，药监局局长郑筱萸被执行死刑，罪名为受贿，以及玩忽职守，其在任期间，为8家制药企业在药品、医疗器械的审批等方面谋取利益，草率启动药品生产专项工作，擅自降低审批药品标准，其后被揭发部分药厂虚报药品资料。
+        </p>
+        <p>这一年，国家食药监总局颁布《药品注册管理办法》，制药企业再不能像以往一样，很容易便拿到药品批文，一年就能获取几十个甚至上百个批文的局面，一去不复返了。
+        </p>
+        <p>这一年，国家局开始全国范围内的现场考核，大批企业被查处，前期制药企业大跃进式的发展终被抑制，诸多假药浮于水面，齐二药被曝掺假辅料、鱼腥草注射液有不良反应、欣弗查出无菌保障不够……
+        </p>
+        <p>这一年，继之前国家发改委连续发出3次药品降价令后，针对药品的降价政策仍将延续，先后又进行5次降价，调节领域遍布中成药、西药。
+        </p>
+        <p>这一年，民众奔走相告，而制药企业如履薄冰。肃清过后的市场经过洗牌后，慢慢回暖。南方医药经济研究所（简称“南方所”）制定“中国制药工业百强榜”进入第二届，评估机制更为科学，以期通过市场信息评估制药工业发展情况。
+        </p>
+        <p>至今，南方所发布百强榜已有12年，笔者截取了2007-2016年出现在百强榜上的企业为研究对象，借此一窥中国制药企业的商业沉浮。
+        </p>
+        <p>10年间，制药工业百强榜的最低门槛发生巨大变化。2007年，石家庄欧意药业有限公司成为最后一名入围选手，当年销售达10亿，主要生产制剂成药，以“欧意”、“维宏”等最为人熟知；10年后，百强榜营收额的最低门槛则为30.8亿，太安堂成为入围的最后一个幸运儿，其主要针对治疗皮肤病、心肾的软膏剂、片剂、胶囊剂、丸剂、溶液剂等，随着二胎放宽等因素，企业发展势头良好。
+        </p>
+        <p>从2007年到2016年，中国制药企业市场曾动荡不安，也曾高歌猛进；这10年间，“中国制药工业百强”名单上曾出现过177家制药企业，有的独占鳌头，有的昙花一现，自然也有黯然退场……
+        </p>
+    </div>
+
+    <div class="text1">
+        <p style="font-size: 25px;font-family: 微软雅黑;color:#009999;text-align:center "> 东南地区遍地开花
+        </p>
+    </div>
+
+    <!-- 第一张地图／热力图 -->
+    <div>
+        <div class="detail-info" style="display: none;">
+            <div style="padding: 3px;text-align: left;font-size: 16px;font-weight: 600;font-family:微软雅黑">详细信息</div>
+            <hr color="black" style="height:2px;">
+            <div id="detailInfo"></div>
+        </div>
+        <div id="map" style="width: 100%;height: 600px;"></div>
+        <script type="text/javascript">
+            function formatData(data) {
+                var series = [{
+                    data: []
+                }, {
+                    data: []
+                }]
+                for (var i = 0; i < data.length; i++) {
+                    var n = data[i].national_capital == "yes" ? 0 : 1
+                    series[n].data.push({
+                        name: data[i].medicine_company,
+                        year: data[i].year,
+                        setTime: data[i].year_month_day,
+                        type: data[i].type,
+                        num: data[i].capital_num,
+                        market: data[i].timeToMarket,
+                        boss: data[i].boss,
+                        shareholders: data[i].shareholders,
+                        executives: data[i].executives,
+                        address: data[i].address,
+                        province: data[i].province,
+                        capital: data[i].capital,
+                        value: [
+                            data[i].lon,
+                            data[i].lat,
+                            data[i].capital
+                        ]
+                    })
+                }
+                return series;
+            }
+
+            var data = {}
+            for (var i = 0; i < json.length; i++) {
+                var year = json[i].year;
+                if (!data[year]) {
+                    data[year] = [];
+                }
+                data[year].push(json[i])
+            }
+
+            var options = []
+            var min = 1979;
+            var cData = []
+            for (var key in data) {
+                if (key - min < 0) {
+                    min = key
+                }
+                cData = cData.concat(data[key]);
+                options.push({
+                    series: formatData(cData)
+                })
+            }
+
+            var firstSeries = (function() {
+                var series = [{
+                    type: 'scatter', //type: 'effectScatter'
+                    coordinateSystem: 'geo',
+                    data: [],
+                    symbolSize: function(val, param) {
+                        return param.data.num * 10
+                    },
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#009999'
+                        }
+                    }
+                }, {
+                    type: 'scatter', //type: 'effectScatter'
+                    coordinateSystem: 'geo',
+                    data: [],
+                    symbolSize: 20,
+                    showEffectOn: 'render',
+                    rippleEffect: {
+                        brushType: 'stroke'
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            show: false
+                        },
+                        emphasis: {
+                            show: false
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: '#CCFFFF'
+                        }
+                    }
+                }]
+                var arr = []
+                for (var i = 0; i < data[min].length; i++) {
+                    var nData = data[min][i];
+                    arr.push({
+                        name: nData.medicine_company,
+                        year: nData.year,
+                        setTime: nData.year_month_day,
+                        type: nData.type,
+                        num: nData.capital_num,
+                        market: nData.timeToMarket,
+                        boss: nData.boss,
+                        shareholders: nData.shareholders,
+                        executives: nData.executives,
+                        address: nData.address,
+                        province: nData.province,
+                        capital: nData.capital,
+                        value: [
+                            nData.lon,
+                            nData.lat,
+                            nData.capital
+                        ]
+                    })
+                }
+                var n = nData.national_capital == "yes" ? 0 : 1
+                series[n].data = arr;
+                return series;
+            })()
+
+            var chart = echarts.init(document.getElementById("map"));
+
+            var option = {
+                baseOption: {
+                    timeline: {
+                        // y: 0,
+                        axisType: 'category',
+                        // realtime: false,
+                        loop: false,
+                        autoPlay: false,
+                        // currentIndex: 2,
+                        playInterval: 1000,
+                        // controlStyle: {
+                        //     position: 'left'
+                        // },
+                        data: ["1979", "1984", "1985", "1986", "1989", "1990", "1991", "1992", "1993", "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002", "2003", "2004", "2005", "2007", "2009", "2011", "2012"],
+                        label: {
+                            normal: {
+                                color: "#ffffff"
+                            },
+                            emphasis: {
+                                color: "#000000"
+                            }
+                            //			                formatter : function(s) {
+                            //			                    return (new Date(s)).getFullYear();
+                            //			                }
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(param) {
+                            if (param.componentType == "series") {
+                                var data = param.data;
+                                var text = "";
+                                text += "公司 : " + data.name + "<br/><br/>"
+                                text += "企业类型 : " + data.type + "<br/><br/>"
+                                text += "法人 : " + data.boss + "<br/>"
+                                var shareholders = data.shareholders
+                                    //				        	if ( shareholders.length > 50 ){
+                                    //				        		var arr = shareholders.split(",");
+                                    //				        	}
+                                    //					        	text += "重要股东 : " + data.shareholders + "<br/>"
+                                return text;
+                            }
+                        }
+                    },
+                    geo: {
+                        map: 'china',
+                        label: {
+                            normal: {
+                                show: false
+                            },
+                            emphasis: {
+                                show: false
+                            }
+                        },
+                        roam: true,
+                        itemStyle: {
+                            normal: {
+                                areaColor: '#000',
+                                borderColor: '#fff'
+                            },
+                            emphasis: {
+                                areaColor: '#000'
+                            }
+                        }
+                    },
+                    series: firstSeries
+                        //				    [
+                        //				   	 	{
+                        //					     	type: 'scatter',
+                        //					        coordinateSystem: 'geo',
+                        //					        data: firstData,
+                        //					        symbolSize: 20,
+                        ////					        function(val) {
+                        ////					        	if ( typeof(val[2]) == "string" ){
+                        ////					        		val[2] = parseInt(val[2]) * 10000;
+                        ////					        	}
+                        ////					        	val[2] > 50000 ? val[2] = 50000 : val[2];
+                        ////					        	val[2] < 10000 ? val[2] = 10000 : val[2];
+                        ////					            return Math.max(val[2] / 1000, 8);
+                        ////					        },
+                        //					        label: {
+                        //					            normal: {
+                        //					                show: false
+                        //					            },
+                        //					            emphasis: {
+                        //					                show: false
+                        //					            }
+                        //					        },
+                        //					        itemStyle: {
+                        //					            normal: {
+                        //					                color: '#FF8C00'
+                        //					            }
+                        //					        }
+                        //						}
+                        //				   	]
+                },
+                options: options
+            };
+            chart.setOption(option);
+
+            chart.on("click", function(param) {
+                if (param.componentType == "series") {
+                    var data = param.data;
+                    var div = document.getElementById("detailInfo");
+                    document.getElementsByClassName("detail-info")[0].style.display = "block";
+                    div.innerHTML = "";
+                    for (var key in data) {
+                        if (info[key] && data[key].length > 0) {
+                            var spanNode = document.createElement("span");
+                            var textnode = document.createTextNode(info[key] + " : " + data[key]);
+                            spanNode.appendChild(textnode);
+                            div.appendChild(spanNode);
+                            var brNode = document.createElement("br");
+                            div.appendChild(brNode);
+                            var brNode = document.createElement("br");
+                            div.appendChild(brNode);
+                        }
+                    }
+                }
+            })
+        </script>
+    </div>
+    <div class="text1">
+        <p>10年间，曾经有幸进入百强榜的企业，分布地域多集中于江苏，广东，山东、浙江、上海、北京等地，占上榜企业总数50%以上。这与医院分布情况密切相关，制药企业聚集的地方，基本上也是医院聚集的地方，如此分布，可有效降低运输成本，提高利润。尽管河南进入百强榜的企业并不多见，但是中小企业却分布十分密集。
+        </p>
+        <p>同时，相比较来讲，这些省份均属人口大省或流动人口较多，如北京、上海等地人才聚集；而广东劳动力密集；山东、河南、江苏均为人口大省。一方面，新药研发离不开高级人才储备，另一方面，制药行业末端则需大量廉价劳动力，因此人口密度大的地区也称为制药企业聚集的地区。
+        </p>
+        <p>再者，从药品销售来讲，东部地区无论是交通亦或是对外借口都要比中西部更为便捷。
+        </p>
+    </div>
+    <!-- 第二张图／7000家中小企业图 -->
+    <div>
+        <div id="mainsss" style="width:100%;height: 500px; margin:5px"></div>
+        <script>
+            var myChart1 = echarts.init(document.getElementById("mainsss"));
+
+            var options = {
+                baseOption: {
+                    timeline: {
+                        data: ['2015',
+                            '2016',
+                            '2017',
+                        ],
+                        show: true,
+                        top: 5,
+                        left: 600,
+                        lineStyle: {
+                            show: false,
+                        },
+                        symbolSize: 0,
+                        autoPlay: true,
+                        playInterval: 2000,
+                        loop: true,
+                        label: {
+                            normal: {
+                                show: false,
+                            },
+                        },
+                        checkpointStyle: {
+                            color: "transparent",
+                            borderColor: "transparent",
+                        },
+                        controlStyle: {
+                            showPrevBtn: false,
+                            showNextBtn: false,
+                            itemSize: 50,
+                            normal: {
+                                color: '#009999',
+                                borderColor: '#009999',
+                                borderWidth: 1.5,
+                            },
+                            emphasis: {
+                                color: '#ffce22',
+                                borderColor: '#ffce22',
+                                borderWidth: 1.5,
+                            },
+
+                        }
+                    },
+                    title: {
+                        left: 400,
+                        textStyle: {
+                            color: '#009999',
+                            fontWeight: "bold",
+                            fontSize: 60,
+                        },
+
+
+                    },
+                    grid: [{
+                        x: '25%',
+                        y: '15%',
+                        top: 70,
+                        width: '28%',
+                        height: '80%',
+                        show: false,
+                    }, {
+                        x: '65%',
+                        y: '15%',
+                        width: '28%',
+                        height: '80%',
+                        show: false,
+                    }],
+
+                    yAxis: [{
+                        type: 'category',
+                        axisLabel: {
+                            interval: 0,
+                            textStyle: {
+                                color: '#009999'
+                            }
+                        },
+                        axisLine: {
+                            show: false,
+                        },
+                        axisTick: {
+                            show: false,
+                        },
+                        data: ['安徽',
+                            '贵州',
+                            '云南',
+                            '新疆',
+                            '四川',
+                            '上海',
+                            '山西',
+                            '青海',
+                            '宁夏',
+                            '江西',
+                            '江苏',
+                            '吉林',
+                            '湖南',
+                            '湖北',
+                            '黑龙江',
+                            '河南',
+                        ],
+                        splitLine: {
+                            show: false
+                        },
+                        gridIndex: 0,
+                        inverse: true,
+
+                    }, {
+                        type: 'category',
+                        axisLabel: {
+                            interval: 0,
+                            textStyle: {
+                                color: '#009999'
+                            }
+                        },
+                        axisLine: {
+                            show: false,
+                        },
+                        axisTick: {
+                            show: false,
+                        },
+                        data: [
+                            '浙江',
+                            '重庆',
+                            '北京',
+                            '内蒙古',
+                            '天津',
+                            '海南',
+                            '河北',
+                            '福建',
+                            '广东',
+                            '广西',
+                            '陕西',
+                            '西藏',
+                            '山东',
+                            '辽宁',
+                            '甘肃',
+                        ],
+                        splitLine: {
+                            show: false
+                        },
+                        gridIndex: 1,
+                        inverse: true,
+                    }],
+
+                    xAxis: [{
+                        type: 'value',
+                        min: 0,
+                        max: 550,
+                        show: false,
+                        gridIndex: 0,
+                    }, {
+                        type: 'value',
+                        min: 0,
+                        max: 550,
+                        show: false,
+                        gridIndex: 1,
+                    }],
+
+
+                    series: [{
+                        name: '各省数量1',
+                        type: 'bar',
+                        xAxisIndex: 0,
+                        yAxisIndex: 0,
+                        itemStyle: {
+                            normal: {
+                                color: '#009999'
+                            }
+                        },
+                        data: null,
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight',
+                                textStyle: {
+                                    color: '#ffffff'
+                                }
+                            },
+                        },
+                    }, {
+                        name: '各省数量2',
+                        type: 'bar',
+                        xAxisIndex: 1,
+                        yAxisIndex: 1,
+                        itemStyle: {
+                            normal: {
+                                color: '#009999'
+                            }
+                        },
+                        data: null,
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'insideRight',
+                                textStyle: {
+                                    color: '#ffffff',
+                                },
+                            },
+                        },
+                    }],
+
+
+
+
+                },
+                options: null
+            }
+            var all_data;
+            $.getJSON("./company_echarts/all_years.json", function(res) {
+                all_data = res;
+                options.options = res;
+                myChart1.setOption(options)
+            })
+        </script>
+    </div>
+    </div>
+
+    <!-- 第二张图／图解-->
+    <div class="text1">
+        <p>该图显示了2016年中国大型制药企业的地域分布情况。中小企业的分布情况同上图类似。据不完全统计，2015年以来，新注册的制药公司高达7029家，依旧分布在医药发达的地区，如江苏、广东、山东等地。
+        </p>
+    </div>
+
+    <div class="text1">
+        <p style="font-size: 25px;font-family: 微软雅黑;color:#009999;text-align:center "> 2011年成为关键节点
+        </p>
+    </div>
+
+    <div class="text1">
+        <p>在我国，药品分为新药和仿制药。所谓的仿制药，简单来理解就是仿已有国家标准的药品。纵观整个行业背景，70年代青蒿素问世后，中国的制药公司再没有真正研制出过一款首创药，多数以生产仿制药为主，根据食药总局提供的统计数字，中国已有的药品批准文号总数高达18.9万个，95%以上为仿制药。
+        </p>
+        <p>
+            2011年时，三年前颁发的《国务院关于印发医药卫生体制改革近期重点实施方案（2009－2011年）的通知》已到检验之期，医改成为绕不过去的话题。这一年，中国明确提出发展本国生命科学与制药产业，此后，国家不断为新药开发投入资金，截止2015年，共计投入11亿美元。同时，政府不断引进海外归国人员，具备生物医学专业背景的人才成为“香饽”。公共医疗保险被全面覆盖，被纳入目录的药品伴随定价压力。无专利，无品牌，无扩展渠道的制药企业迅速陷入危机。
+        </p>
+    </div>
+
+    <!-- <div> 放top5企业10年内的发展情况-->
+    <div>
+        <div id="main" style="width: 80%;height: 300px;margin: 0 auto"></div>
+        <script>
+            var myChart2 = echarts.init(document.getElementById('main'));
+            option = {
+                // title: {
+                //     text: '10年top5企业排行榜'
+                // },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['广州医药集团', '修正药业集团', '上海医药集团', '石药集团', '步长医药', '天津医药', '哈药集团', '华北制药集团', '扬子江药业']
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: ['2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016']
+                },
+                yAxis: {
+                    type: 'value',
+                    data: ['2', '4', '6', '8', '10', '12', '16', '18']
+                },
+                series: [{
+                        name: '广州医药集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [4, 7, 6, 6, null, 1, 1, 1, 1, 1]
+                    }, {
+                        name: '修正药业集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [8, 6, 4, 5, 6, 6, 6, null, 2, 2]
+                    }, {
+                        name: '上海医药集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [3, 3, 3, 3, 2, 10, 3, 2, 3, 3]
+                    }, {
+                        name: '石药集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [2, 2, 2, 2, 3, 4, 7, 6, 4, 4]
+                    }, {
+                        name: '步长医药',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [17, 13, 9, 8, 8, 8, 8, 7, 6, 5]
+                    }, {
+                        name: '天津医药',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [5, 4, 7, 11, 10, 7, 2, 3, 5, 7]
+                    }, {
+                        name: '哈药集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [1, 1, 1, 1, 4, 3, 5, 5, 8, 10]
+                    }, {
+                        name: '华北制药集团',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [7, 8, 8, 7, 7, 2, 4, 4, 11, 12]
+                    }, {
+                        name: '扬子江药业',
+                        type: 'line',
+                        // stack: '总量',
+                        data: [6, 5, 5, 4, 5, 5, null, null, null, null]
+                    }]
+                    // itemStyle: {
+                    //     normal: {
+                    //         color: function(params) {
+                    //             var colorlist = ['#009999', '#339999', '#66CCCC', '#99CCCC', '#CCFFFF'];
+                    //             return colorlist[params.dataIndex]
+                    //         }
+                    //     }
+                    // },
+            };
+
+            myChart2.setOption(option);
+        </script>
+    </div>
+    <div class="text1" charset="utf-8">
+        <p>吧啦吧啦关于药企生产的东西，一会补充从百强榜上的排名变化中，10年内曾进入前5的企业，在排除华润医药（除2011年外，其他年份均以子公司进行评选），大部分制药公司历年稳步在前10名。2011年之前，哈药集团、石药集团以及上海医药集团，地位稳固，稳居前三。作为早些年制药领域的霸主，自2007年实施股改之后，发展稳定，营收逐年上升，从2007年营收122.8亿元，到2010年，营收则达180亿元，最让人津津乐道的是，其“三精葡萄糖酸钙”、“新盖中盖”等补钙品牌充斥电视屏幕。
+        </p>
+    </div>
+
+    <div class="text1">
+        <p style="font-size: 25px;font-family: 微软雅黑;color:#009999;text-align:center "> 为创营收各显神通
+        </p>
+    </div>
+    <div class="img1"><img src="image/3.png" width="25%"></img>
+    </div>
+    <div class="text1" charset="utf-8">
+        <p>从百强榜上的排名变化中，10年内曾进入前5的企业，在排除华润医药（除2011年外，其他年份均以子公司进行评选），大部分制药公司历年稳步在前10名。2011年之前，哈药集团、石药集团以及上海医药集团，地位稳固，稳居前三。作为早些年制药领域的霸主，自2007年实施股改之后，发展稳定，营收逐年上升，从2007年营收122.8亿元，到2010年，营收则达180亿元，最让人津津乐道的是，其“三精葡萄糖酸钙”、“新盖中盖”等补钙品牌充斥电视屏幕。
+        </p>
+        <p>广州医药集团，自2011年进行改组之后，则迅速成为制药行业巨头。2016年营业收入为878亿元，有望迈向千亿俱乐部。其主要业绩来自中药和化药，此外有一小部分生物药，化药中的金戈和抗生素为增长亮点，特别是单品金戈市场，2016年营收增速达71%，销售收入超4亿元，毛利率高达92%。
+        </p>
+        <p>前些年以“修正药，良心药”为广告词风靡一时的修正药业，却相继在2012年牵扯到羚羊“毒胶囊”事件，2014年被查出用于生产肺宁颗粒的药材返魂草部分发生霉变，且存在故意编造虚假检验报告等行为，2017年8月，一纸判决书又将其推上风口浪尖。据法治周末报道，其董事长修涞贵涉嫌行贿行为，给予曾担任吉林省靖宇县县长的褚来福25万通化市制药股份有限公司股权。但这也丝毫并未影响到修正药业的市场份额，度过2014年的难关，依然雄踞第二，而这与其花重金做广告的行为密不可分。</p>
+        <p>步长制药于2016年终于晋级百强前五，是10年内唯一一家排名稳步上升的企业。这与其研发、培育出脑心通胶囊、稳心颗粒和丹红注射液三个独家专利品种密不可分，同时，公司多次进行融资活动，以完善生产。
+        </p>
+        <p>事实上，通过盘点这些制药企业巨头，其制胜法宝有三点可见，一是新药研发是为根本，一旦有新药上市，迅速打开市场，毛利可观，但机会可遇不可求；二是天价广告掩盖黑点，塑造企业形象，有效有力，在争议中前行；三是疲弱之时借助企业重组或以IPO定向发行，借助政策红利以求翻身，但此举有利有弊。
+        </p>
+    </div>
+
+
+    <br></br>
+
+    <div class="text1">
+        <h3>注释：</h3>
+        <p>1. 数据来源：南方医药经济研究所、国家食品药品监督管理总局、天眼查、国家统计局等</p>
+        <p>2. 共抓取制药企业有效数据7144条，十年top100制药企业有效数据187家</p>
+        <p>3. 参考报道：</p>
+        <p>我国医药行业发展机遇分析，中国产业研究报告网，http://www.chinairr.org
+        </p>
+        <p>2016年中国制药企业排名百强，https://www.phb123.com/qiye/14802.html</p>
+        <p>修正药业等300余医药企卷入贿赂案 不乏董事长等高层，http://finance.china.com/industrial/11173306/20170802/31026621.html</p>
+        <p>4. 感谢各位老师、助教及同学们的帮助</p>
+    </div>
+</body>
+
+
+</html>
